@@ -1,51 +1,86 @@
 ---
-import type { Product } from '../data/products';
-import { formatPrice } from '../data/products';
-interface Props { product: Product; }
-const { product } = Astro.props;
-const stars = '\u2605'.repeat(Math.floor(product.rating));
+interface Props {
+  slug: string;
+  name: string;
+  price: string;
+  category: string;
+  svgContent: string;
+}
+
+const { slug, name, price, category, svgContent } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
-<article class="card">
-  <a href={`/product/${product.slug}`}>
-    <div class="img-wrap">
-      <img src={product.images[0]} alt={product.name} loading="lazy" width="600" height="600" />
-      <div class="badges">
-        {product.new && <span class="badge badge-new">New</span>}
-        {product.comparePrice && <span class="badge badge-sale">Sale</span>}
-      </div>
-      <span class="quick-view">Quick View</span>
-    </div>
-    <div class="info">
-      <p class="cat">{product.category}</p>
-      <h3 class="pname">{product.name}</h3>
-      <div class="price-row">
-        <span class="price">{formatPrice(product.price)}</span>
-        {product.comparePrice && <span class="compare">{formatPrice(product.comparePrice)}</span>}
-      </div>
-      <div class="rating"><span class="stars-display">{stars}</span> <span>({product.reviewCount})</span></div>
-    </div>
-  </a>
-</article>
+<a href={`${baseUrl}products/${slug}/`} class="product-card">
+  <div class="product-image" set:html={svgContent} />
+  <div class="product-info">
+    <p class="category">{category}</p>
+    <h3>{name}</h3>
+    <p class="price">{price}</p>
+  </div>
+</a>
 
 <style>
-  .card { position: relative; background: var(--color-surface); border: 1px solid var(--color-border-light); border-radius: var(--border-radius-lg); overflow: hidden; transition: transform var(--transition), box-shadow var(--transition); }
-  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-  .img-wrap { position: relative; aspect-ratio: 1; overflow: hidden; background: var(--color-bg-alt); }
-  .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; }
-  .card:hover .img-wrap img { transform: scale(1.05); }
-  .badges { position: absolute; top: var(--space-sm); left: var(--space-sm); display: flex; flex-direction: column; gap: var(--space-xs); }
-  .badge { padding: 3px 10px; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; border-radius: 2px; }
-  .badge-new { background: var(--color-accent); color: white; }
-  .badge-sale { background: #c0392b; color: white; }
-  .quick-view { position: absolute; bottom: var(--space-md); left: 50%; transform: translateX(-50%) translateY(10px); opacity: 0; padding: 10px 24px; background: var(--color-surface); color: var(--color-text); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: var(--border-radius); box-shadow: var(--shadow-md); transition: opacity var(--transition), transform var(--transition); }
-  .card:hover .quick-view { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .info { padding: var(--space-md); }
-  .cat { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-xs); }
-  .pname { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 500; margin-bottom: var(--space-sm); }
-  .price-row { display: flex; align-items: center; gap: var(--space-sm); }
-  .price { font-size: 1rem; font-weight: 600; }
-  .compare { font-size: 0.85rem; color: var(--color-text-muted); text-decoration: line-through; }
-  .rating { display: flex; align-items: center; gap: var(--space-xs); margin-top: var(--space-sm); font-size: 0.8rem; color: var(--color-text-muted); }
-  .stars-display { color: var(--color-accent); letter-spacing: 1px; }
+  .product-card {
+    display: block;
+    background-color: white;
+    border-radius: 2px;
+    overflow: hidden;
+    transition: var(--transition);
+  }
+  
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(10, 10, 10, 0.1);
+  }
+  
+  .product-image {
+    aspect-ratio: 1;
+    background-color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+  }
+  
+  .product-image :global(svg) {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+  }
+  
+  .product-info {
+    padding: var(--spacing-md);
+    text-align: center;
+  }
+  
+  .category {
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .product-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .price {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+  
+  @media (max-width: 768px) {
+    .product-image {
+      padding: var(--spacing-md);
+    }
+    
+    .product-info {
+      padding: var(--spacing-sm);
+    }
+  }
 </style>

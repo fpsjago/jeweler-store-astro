@@ -1,0 +1,267 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About Us - MAISON">
+  <section class="page-header">
+    <div class="container">
+      <h1>Our Story</h1>
+      <p>A legacy of craftsmanship, beauty, and timeless elegance</p>
+    </div>
+  </section>
+
+  <section class="story-section">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-content">
+          <h2>Heritage & Craft</h2>
+          <p>Founded with a passion for exceptional craftsmanship, MAISON has been creating heirloom-quality jewelry for discerning collectors worldwide. Our atelier combines time-honored techniques with contemporary design sensibilities.</p>
+          <p>Each piece that bears our name is a testament to the skill of our master jewelers, who bring decades of experience and an unwavering commitment to excellence. From the first sketch to the final polish, every step is executed with precision and care.</p>
+        </div>
+        
+        <div class="story-image">
+          <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="100" y="100" width="200" height="200" stroke="#C6A87D" stroke-width="2" fill="none"/>
+            <rect x="120" y="120" width="160" height="160" stroke="#C6A87D" stroke-width="3" fill="none"/>
+            <path d="M200 150 L220 180 L200 210 L180 180 Z" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="200" cy="180" r="10" fill="#C6A87D" opacity="0.4"/>
+            <line x1="200" y1="150" x2="200" y2="210" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+            <line x1="180" y1="180" x2="220" y2="180" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="values-section">
+    <div class="container">
+      <h2>Our Principles</h2>
+      
+      <div class="values-list">
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M25 10 L35 20 L25 30 L15 20 Z" stroke="#C6A87D" stroke-width="2" fill="none"/>
+              <circle cx="25" cy="20" r="3" fill="#C6A87D"/>
+            </svg>
+          </div>
+          <h3>Uncompromising Quality</h3>
+          <p>We source only the finest materials and work with master craftspeople to ensure each piece meets our exacting standards.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="25" cy="25" r="12" stroke="#C6A87D" stroke-width="2" fill="none"/>
+              <path d="M15 25 L20 25 M30 25 L35 25 M25 15 L25 20 M25 30 L25 35" stroke="#C6A87D" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3>Ethical Sourcing</h3>
+          <p>All our gemstones and precious metals are sourced through ethical, conflict-free channels with full traceability.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="15" y="15" width="20" height="20" stroke="#C6A87D" stroke-width="2" fill="none"/>
+              <path d="M20 20 L30 30 M30 20 L20 30" stroke="#C6A87D" stroke-width="1" opacity="0.5"/>
+            </svg>
+          </div>
+          <h3>Timeless Design</h3>
+          <p>Our designs transcend fleeting trends, creating pieces that will be cherished and passed down through generations.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="25" cy="25" r="15" stroke="#C6A87D" stroke-width="2" fill="none"/>
+              <circle cx="25" cy="25" r="8" stroke="#C6A87D" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+          <h3>Personal Service</h3>
+          <p>We offer bespoke consultations, custom design services, and lifetime care for every piece we create.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="team-section">
+    <div class="container">
+      <h2>Master Craftspeople</h2>
+      <p class="section-intro">Our team of skilled artisans brings together centuries of collective experience in the art of fine jewelry making.</p>
+      
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Years of Experience</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">1000+</div>
+          <div class="stat-label">Pieces Created</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Handcrafted</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background-color: white;
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+  }
+  
+  .container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+  }
+  
+  .page-header h1 {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .page-header p {
+    font-size: 1.1rem;
+    color: var(--warm-gray);
+  }
+  
+  .story-section {
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: center;
+  }
+  
+  .story-content h2 {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .story-content p {
+    font-size: 1.1rem;
+    color: var(--warm-gray);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.8;
+  }
+  
+  .story-image svg {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .values-section {
+    background-color: white;
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .values-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .values-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+  
+  .value-card {
+    padding: var(--spacing-lg);
+    background-color: var(--cream);
+    border-radius: 4px;
+  }
+  
+  .value-icon {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .value-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .value-card p {
+    color: var(--warm-gray);
+  }
+  
+  .team-section {
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .team-section h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .section-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--warm-gray);
+    max-width: 700px;
+    margin: 0 auto var(--spacing-xl);
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+  
+  .stat {
+    text-align: center;
+    padding: var(--spacing-lg);
+    background-color: white;
+    border-radius: 4px;
+  }
+  
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--gold);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .stat-label {
+    font-size: 1rem;
+    color: var(--warm-gray);
+    letter-spacing: 0.05em;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 var(--spacing-md);
+    }
+    
+    .story-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+    
+    .story-image {
+      order: -1;
+    }
+    
+    .story-image svg {
+      max-width: 250px;
+    }
+    
+    .values-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+  }
+</style>

@@ -1,14 +1,302 @@
 ---
-import Base from '../layouts/Base.astro';
-import Hero from '../components/Hero.astro';
-import Categories from '../components/Categories.astro';
-import FeaturedProducts from '../components/FeaturedProducts.astro';
-import Newsletter from '../components/Newsletter.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/products';
+
+const baseUrl = import.meta.env.BASE_URL;
+const featuredProducts = products.slice(0, 4);
 ---
 
-<Base currentPage="/">
-  <Hero />
-  <Categories />
-  <FeaturedProducts />
-  <Newsletter />
-</Base>
+<BaseLayout title="MAISON - Exquisite Handcrafted Jewelry">
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Timeless Elegance</h1>
+      <p>Discover our collection of handcrafted jewelry, where artistry meets exceptional quality.</p>
+      <a href={`${baseUrl}collections/`} class="btn-primary">Explore Collections</a>
+    </div>
+    <div class="hero-image">
+      <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="120" stroke="#C6A87D" stroke-width="2" opacity="0.3"/>
+        <circle cx="200" cy="200" r="90" stroke="#C6A87D" stroke-width="3" opacity="0.5"/>
+        <circle cx="200" cy="200" r="60" stroke="#C6A87D" stroke-width="4"/>
+        <path d="M200 140 L230 180 L200 240 L170 180 Z" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+        <path d="M200 180 L215 195 L200 210 L185 195 Z" fill="#C6A87D" opacity="0.4"/>
+        <line x1="200" y1="140" x2="200" y2="240" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+        <line x1="170" y1="180" x2="230" y2="180" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured Collection</h2>
+        <p>Handpicked pieces that embody our commitment to excellence</p>
+      </div>
+      
+      <div class="product-grid">
+        {featuredProducts.map(product => (
+          <ProductCard {...product} />
+        ))}
+      </div>
+      
+      <div class="cta-center">
+        <a href={`${baseUrl}collections/`} class="btn-secondary">View All Jewelry</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="values">
+    <div class="container">
+      <div class="values-grid">
+        <div class="value-item">
+          <div class="value-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30 10 L40 20 L30 30 L20 20 Z" stroke="#C6A87D" stroke-width="2" fill="none"/>
+              <circle cx="30" cy="30" r="20" stroke="#C6A87D" stroke-width="2" opacity="0.3"/>
+            </svg>
+          </div>
+          <h3>Exceptional Quality</h3>
+          <p>Every piece is crafted with meticulous attention to detail using only the finest materials.</p>
+        </div>
+        
+        <div class="value-item">
+          <div class="value-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 25 L30 15 L40 25 L30 35 Z" stroke="#C6A87D" stroke-width="2" fill="none"/>
+              <path d="M30 35 L20 45 L30 55 L40 45 Z" stroke="#C6A87D" stroke-width="2" fill="none"/>
+              <line x1="30" y1="15" x2="30" y2="55" stroke="#C6A87D" stroke-width="1" opacity="0.3"/>
+            </svg>
+          </div>
+          <h3>Timeless Design</h3>
+          <p>Classic elegance that transcends trends, designed to be treasured for generations.</p>
+        </div>
+        
+        <div class="value-item">
+          <div class="value-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="30" cy="30" r="15" stroke="#C6A87D" stroke-width="2" fill="none"/>
+              <path d="M15 30 L22 30 M38 30 L45 30 M30 15 L30 22 M30 38 L30 45" stroke="#C6A87D" stroke-width="2"/>
+              <circle cx="30" cy="30" r="3" fill="#C6A87D"/>
+            </svg>
+          </div>
+          <h3>Ethical Sourcing</h3>
+          <p>We are committed to responsible sourcing and conflict-free materials in all our creations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="container">
+      <div class="story-content">
+        <h2>A Legacy of Excellence</h2>
+        <p>For generations, MAISON has been synonymous with exceptional craftsmanship and timeless beauty. Each piece in our collection tells a story of artistry, passion, and dedication to the finest traditions of jewelry making.</p>
+        <p>From our atelier to your collection, we ensure every detail meets the highest standards of luxury and elegance.</p>
+        <a href={`${baseUrl}about/`} class="btn-text">Discover Our Story</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: center;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    min-height: 80vh;
+  }
+  
+  .hero-content h1 {
+    margin-bottom: var(--spacing-md);
+    color: var(--black);
+  }
+  
+  .hero-content p {
+    font-size: 1.25rem;
+    color: var(--warm-gray);
+    margin-bottom: var(--spacing-lg);
+    max-width: 500px;
+  }
+  
+  .hero-image svg {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .btn-primary {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--black);
+    color: var(--cream);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--gold);
+    color: var(--black);
+  }
+  
+  .btn-secondary {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: 2px solid var(--black);
+    color: var(--black);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--black);
+    color: var(--cream);
+  }
+  
+  .btn-text {
+    color: var(--gold);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    position: relative;
+    padding-bottom: 4px;
+  }
+  
+  .btn-text::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--gold);
+  }
+  
+  .btn-text:hover {
+    opacity: 0.7;
+  }
+  
+  .featured {
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .section-header h2 {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .section-header p {
+    font-size: 1.1rem;
+    color: var(--warm-gray);
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .cta-center {
+    text-align: center;
+  }
+  
+  .values {
+    background-color: white;
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+  
+  .value-item {
+    text-align: center;
+  }
+  
+  .value-icon {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .value-item h3 {
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.5rem;
+  }
+  
+  .value-item p {
+    color: var(--warm-gray);
+  }
+  
+  .story {
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .story-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .story-content h2 {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .story-content p {
+    font-size: 1.1rem;
+    color: var(--warm-gray);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: var(--spacing-lg) var(--spacing-md);
+      min-height: auto;
+    }
+    
+    .hero-image {
+      order: -1;
+    }
+    
+    .hero-image svg {
+      max-width: 250px;
+    }
+    
+    .product-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+    
+    .values-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+    
+    .container {
+      padding: 0 var(--spacing-md);
+    }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

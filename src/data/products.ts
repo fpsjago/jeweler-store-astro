@@ -1,79 +1,225 @@
 export interface Product {
-  id: string;
-  name: string;
   slug: string;
-  price: number;
-  comparePrice?: number;
-  category: Category;
-  metal: Metal;
-  gemstone?: string;
+  name: string;
+  price: string;
+  category: string;
   description: string;
-  shortDescription: string;
-  images: string[];
-  featured: boolean;
-  new: boolean;
-  inStock: boolean;
-  rating: number;
-  reviewCount: number;
+  materials: string[];
+  dimensions: string;
+  svgContent: string;
 }
 
-export type Category = 'rings' | 'necklaces' | 'earrings' | 'bracelets' | 'watches';
-export type Metal = 'gold' | 'silver' | 'platinum' | 'rose-gold';
-export type SortOption = 'price-asc' | 'price-desc' | 'name' | 'newest' | 'rating';
+// Luxury SVG jewelry illustrations
+const diamondRingSVG = `
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="45" stroke="#C6A87D" stroke-width="6" fill="none"/>
+  <circle cx="100" cy="100" r="35" stroke="#C6A87D" stroke-width="2" fill="none"/>
+  <path d="M100 60 L120 85 L100 110 L80 85 Z" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+  <path d="M100 85 L105 90 L100 95 L95 90 Z" fill="#C6A87D"/>
+  <line x1="100" y1="60" x2="100" y2="85" stroke="#0A0A0A" stroke-width="1"/>
+  <line x1="120" y1="85" x2="100" y2="85" stroke="#0A0A0A" stroke-width="1"/>
+  <line x1="100" y1="110" x2="100" y2="85" stroke="#0A0A0A" stroke-width="1"/>
+  <line x1="80" y1="85" x2="100" y2="85" stroke="#0A0A0A" stroke-width="1"/>
+</svg>
+`;
 
-export const categories: { value: Category; label: string; icon: string }[] = [
-  { value: 'rings', label: 'Rings', icon: '💍' },
-  { value: 'necklaces', label: 'Necklaces', icon: '📿' },
-  { value: 'earrings', label: 'Earrings', icon: '✨' },
-  { value: 'bracelets', label: 'Bracelets', icon: '⭕' },
-  { value: 'watches', label: 'Watches', icon: '⌚' },
-];
+const pearlNecklaceSVG = `
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 40 80 Q 100 120 160 80" stroke="#C6A87D" stroke-width="3" fill="none"/>
+  <circle cx="60" cy="88" r="8" fill="#FAF7F2" stroke="#C6A87D" stroke-width="1.5"/>
+  <circle cx="80" cy="98" r="9" fill="#FAF7F2" stroke="#C6A87D" stroke-width="1.5"/>
+  <circle cx="100" cy="102" r="10" fill="#FAF7F2" stroke="#C6A87D" stroke-width="1.5"/>
+  <circle cx="120" cy="98" r="9" fill="#FAF7F2" stroke="#C6A87D" stroke-width="1.5"/>
+  <circle cx="140" cy="88" r="8" fill="#FAF7F2" stroke="#C6A87D" stroke-width="1.5"/>
+  <circle cx="60" cy="88" r="3" fill="#C6A87D" opacity="0.3"/>
+  <circle cx="80" cy="98" r="3" fill="#C6A87D" opacity="0.3"/>
+  <circle cx="100" cy="102" r="3" fill="#C6A87D" opacity="0.3"/>
+  <circle cx="120" cy="98" r="3" fill="#C6A87D" opacity="0.3"/>
+  <circle cx="140" cy="88" r="3" fill="#C6A87D" opacity="0.3"/>
+</svg>
+`;
 
-export const metals: { value: Metal; label: string }[] = [
-  { value: 'gold', label: '18K Gold' },
-  { value: 'silver', label: 'Sterling Silver' },
-  { value: 'platinum', label: 'Platinum' },
-  { value: 'rose-gold', label: 'Rose Gold' },
-];
+const goldBraceletSVG = `
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="100" cy="100" rx="60" ry="40" stroke="#C6A87D" stroke-width="8"/>
+  <ellipse cx="100" cy="100" rx="50" ry="30" stroke="#C6A87D" stroke-width="4" opacity="0.5"/>
+  <path d="M 40 100 L 55 95 L 70 100 L 85 95 L 100 100 L 115 95 L 130 100 L 145 95 L 160 100" 
+        stroke="#0A0A0A" stroke-width="1" opacity="0.2"/>
+  <circle cx="100" cy="60" r="4" fill="#C6A87D"/>
+  <circle cx="100" cy="140" r="4" fill="#C6A87D"/>
+</svg>
+`;
 
-const img = 'https://placehold.co/600x600/1a1a2e/c4a265?text=Jewel';
+const emeraldEarringSVG = `
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(80, 60)">
+    <circle cx="20" cy="10" r="6" fill="#C6A87D"/>
+    <line x1="20" y1="16" x2="20" y2="30" stroke="#C6A87D" stroke-width="2"/>
+    <rect x="10" y="30" width="20" height="28" rx="2" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+    <line x1="15" y1="35" x2="25" y2="53" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+    <line x1="25" y1="35" x2="15" y2="53" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+    <line x1="20" y1="30" x2="20" y2="58" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
+  </g>
+  <g transform="translate(80, 60)">
+    <circle cx="20" cy="10" r="6" fill="#C6A87D"/>
+    <line x1="20" y1="16" x2="20" y2="30" stroke="#C6A87D" stroke-width="2"/>
+    <rect x="10" y="30" width="20" height="28" rx="2" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+  </g>
+</svg>
+`;
+
+const sapphirePendantSVG = `
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 70 60 Q 100 50 130 60" stroke="#C6A87D" stroke-width="3" fill="none"/>
+  <circle cx="85" cy="62" r="3" fill="#C6A87D"/>
+  <circle cx="115" cy="62" r="3" fill="#C6A87D"/>
+  <line x1="100" y1="50" x2="100" y2="80" stroke="#C6A87D" stroke-width="2"/>
+  <path d="M 100 80 L 115 95 L 100 130 L 85 95 Z" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+  <path d="M 100 95 L 107 105 L 100 115 L 93 105 Z" fill="#C6A87D" opacity="0.3"/>
+  <line x1="100" y1="80" x2="100" y2="130" stroke="#0A0A0A" stroke-width="1"/>
+  <line x1="85" y1="95" x2="115" y2="95" stroke="#0A0A0A" stroke-width="1"/>
+</svg>
+`;
+
+const roseGoldRingSVG = `
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="50" stroke="#C6A87D" stroke-width="8" fill="none" opacity="0.6"/>
+  <circle cx="100" cy="100" r="40" stroke="#C6A87D" stroke-width="4" fill="none"/>
+  <g transform="translate(100, 70)">
+    <circle r="8" fill="none" stroke="#0A0A0A" stroke-width="1.5"/>
+    <circle r="4" fill="#C6A87D"/>
+    <line x1="-6" y1="-6" x2="6" y2="6" stroke="#0A0A0A" stroke-width="0.5" opacity="0.3"/>
+    <line x1="6" y1="-6" x2="-6" y2="6" stroke="#0A0A0A" stroke-width="0.5" opacity="0.3"/>
+  </g>
+</svg>
+`;
+
+const tennisNecklaceSVG = `
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 50 90 Q 100 110 150 90" stroke="#C6A87D" stroke-width="4" fill="none"/>
+  <circle cx="65" cy="95" r="5" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+  <circle cx="80" cy="100" r="5" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+  <circle cx="95" cy="102" r="5" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+  <circle cx="105" cy="102" r="5" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+  <circle cx="120" cy="100" r="5" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+  <circle cx="135" cy="95" r="5" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+  <circle cx="65" cy="95" r="2" fill="#C6A87D"/>
+  <circle cx="80" cy="100" r="2" fill="#C6A87D"/>
+  <circle cx="95" cy="102" r="2" fill="#C6A87D"/>
+  <circle cx="105" cy="102" r="2" fill="#C6A87D"/>
+  <circle cx="120" cy="100" r="2" fill="#C6A87D"/>
+  <circle cx="135" cy="95" r="2" fill="#C6A87D"/>
+</svg>
+`;
+
+const marquiseRingSVG = `
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="48" stroke="#C6A87D" stroke-width="7" fill="none"/>
+  <ellipse cx="100" cy="75" rx="12" ry="20" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+  <ellipse cx="100" cy="75" rx="6" ry="10" fill="#C6A87D" opacity="0.4"/>
+  <line x1="100" y1="55" x2="100" y2="75" stroke="#0A0A0A" stroke-width="1" opacity="0.4"/>
+  <line x1="88" y1="65" x2="112" y2="65" stroke="#0A0A0A" stroke-width="1" opacity="0.4"/>
+  <line x1="88" y1="85" x2="112" y2="85" stroke="#0A0A0A" stroke-width="1" opacity="0.4"/>
+</svg>
+`;
 
 export const products: Product[] = [
-  { id: '1', name: 'Eternal Solitaire Ring', slug: 'eternal-solitaire-ring', price: 4250, comparePrice: 5000, category: 'rings', metal: 'platinum', gemstone: 'Diamond', description: 'A timeless solitaire ring featuring a brilliant-cut 1.5 carat diamond set in platinum.', shortDescription: '1.5ct diamond solitaire in platinum', images: [img], featured: true, new: false, inStock: true, rating: 4.9, reviewCount: 127 },
-  { id: '2', name: 'Sapphire Cascade Necklace', slug: 'sapphire-cascade-necklace', price: 3800, category: 'necklaces', metal: 'gold', gemstone: 'Sapphire', description: 'An exquisite cascade necklace featuring graduated Ceylon sapphires set in 18K gold.', shortDescription: 'Ceylon sapphires in 18K gold', images: [img], featured: true, new: true, inStock: true, rating: 4.8, reviewCount: 89 },
-  { id: '3', name: 'Pearl Drop Earrings', slug: 'pearl-drop-earrings', price: 1200, category: 'earrings', metal: 'gold', gemstone: 'Pearl', description: 'Elegant South Sea pearl drop earrings with delicate gold filigree.', shortDescription: 'South Sea pearls with gold filigree', images: [img], featured: true, new: false, inStock: true, rating: 4.7, reviewCount: 64 },
-  { id: '4', name: 'Rose Gold Tennis Bracelet', slug: 'rose-gold-tennis-bracelet', price: 5600, category: 'bracelets', metal: 'rose-gold', gemstone: 'Diamond', description: 'A stunning tennis bracelet featuring 5 carats of round brilliant diamonds in rose gold.', shortDescription: '5ct diamonds in rose gold', images: [img], featured: true, new: false, inStock: true, rating: 4.9, reviewCount: 201 },
-  { id: '5', name: 'Moonlight Chronograph', slug: 'moonlight-chronograph', price: 8900, comparePrice: 9500, category: 'watches', metal: 'platinum', description: 'A masterpiece of horology featuring a moonphase complication and platinum case.', shortDescription: 'Platinum moonphase chronograph', images: [img], featured: true, new: true, inStock: true, rating: 5.0, reviewCount: 43 },
-  { id: '6', name: 'Emerald Halo Ring', slug: 'emerald-halo-ring', price: 3200, category: 'rings', metal: 'gold', gemstone: 'Emerald', description: 'A captivating Colombian emerald surrounded by a halo of brilliant diamonds in 18K gold.', shortDescription: 'Colombian emerald with diamond halo', images: [img], featured: false, new: true, inStock: true, rating: 4.6, reviewCount: 38 },
-  { id: '7', name: 'Silver Cuff Bracelet', slug: 'silver-cuff-bracelet', price: 680, category: 'bracelets', metal: 'silver', description: 'A bold sterling silver cuff bracelet with a hammered finish.', shortDescription: 'Hammered sterling silver cuff', images: [img], featured: false, new: false, inStock: true, rating: 4.5, reviewCount: 156 },
-  { id: '8', name: 'Diamond Stud Earrings', slug: 'diamond-stud-earrings', price: 2400, category: 'earrings', metal: 'platinum', gemstone: 'Diamond', description: 'Classic diamond stud earrings featuring matched 1ct total weight round brilliants.', shortDescription: '1ct total diamond studs in platinum', images: [img], featured: false, new: false, inStock: true, rating: 4.8, reviewCount: 312 },
-  { id: '9', name: 'Gold Chain Necklace', slug: 'gold-chain-necklace', price: 1850, category: 'necklaces', metal: 'gold', description: 'A luxurious 18K gold chain necklace with Italian-crafted box chain design.', shortDescription: '18K Italian gold box chain', images: [img], featured: false, new: false, inStock: true, rating: 4.7, reviewCount: 95 },
-  { id: '10', name: 'Rose Gold Pendant', slug: 'rose-gold-pendant', price: 950, category: 'necklaces', metal: 'rose-gold', gemstone: 'Morganite', description: 'A delicate rose gold pendant featuring a cushion-cut morganite stone.', shortDescription: 'Morganite pendant in rose gold', images: [img], featured: false, new: true, inStock: true, rating: 4.6, reviewCount: 72 },
-  { id: '11', name: 'Platinum Wedding Band', slug: 'platinum-wedding-band', price: 1600, category: 'rings', metal: 'platinum', description: 'A classic platinum wedding band with comfort-fit interior and polished finish.', shortDescription: 'Classic comfort-fit platinum band', images: [img], featured: false, new: false, inStock: true, rating: 4.9, reviewCount: 428 },
-  { id: '12', name: 'Art Deco Watch', slug: 'art-deco-watch', price: 6200, category: 'watches', metal: 'gold', description: 'An Art Deco-inspired timepiece with geometric dial design and 18K gold case.', shortDescription: 'Art Deco 18K gold mechanical watch', images: [img], featured: false, new: false, inStock: true, rating: 4.8, reviewCount: 67 },
+  {
+    slug: 'eternal-solitaire',
+    name: 'Eternal Solitaire',
+    price: '$12,500',
+    category: 'Engagement Rings',
+    description: 'A timeless symbol of eternal love, this solitaire features a brilliant-cut diamond set in 18K white gold. The elegant four-prong setting allows maximum light to showcase the diamond\'s exceptional brilliance.',
+    materials: ['18K White Gold', '1.5ct Diamond', 'Conflict-Free'],
+    dimensions: 'Ring Size 6 (resizable)',
+    svgContent: diamondRingSVG,
+  },
+  {
+    slug: 'akoya-pearls',
+    name: 'Akoya Pearl Strand',
+    price: '$8,900',
+    category: 'Necklaces',
+    description: 'Hand-selected Akoya pearls of exceptional luster, each perfectly matched for size and color. The 18-inch strand features a lustrous rose overtone and a hand-engraved 14K gold clasp.',
+    materials: ['Akoya Pearls', '14K Yellow Gold Clasp', 'Silk Thread'],
+    dimensions: '18 inches, 7-7.5mm pearls',
+    svgContent: pearlNecklaceSVG,
+  },
+  {
+    slug: 'heritage-bangle',
+    name: 'Heritage Bangle',
+    price: '$6,750',
+    category: 'Bracelets',
+    description: 'An elegant wide bangle crafted from solid 18K yellow gold. The hand-engraved pattern draws inspiration from Art Deco geometry, making each piece truly unique.',
+    materials: ['18K Yellow Gold', 'Hand-Engraved'],
+    dimensions: '7 inches inner circumference',
+    svgContent: goldBraceletSVG,
+  },
+  {
+    slug: 'emerald-drops',
+    name: 'Emerald Drop Earrings',
+    price: '$15,200',
+    category: 'Earrings',
+    description: 'Colombian emeralds of extraordinary color, suspended from diamond-studded 18K white gold settings. The elongated drop design frames the face beautifully.',
+    materials: ['Colombian Emeralds 4ct total', '18K White Gold', 'Diamond Accents'],
+    dimensions: '1.5 inches drop length',
+    svgContent: emeraldEarringSVG,
+  },
+  {
+    slug: 'sapphire-pendant',
+    name: 'Royal Sapphire Pendant',
+    price: '$10,400',
+    category: 'Necklaces',
+    description: 'A mesmerizing Ceylon sapphire in a classic pendant design. The deep blue stone is surrounded by a halo of brilliant diamonds, suspended from a delicate platinum chain.',
+    materials: ['Ceylon Sapphire 3ct', 'Platinum', 'Diamond Halo 0.5ct'],
+    dimensions: '18-inch chain, pendant 15mm',
+    svgContent: sapphirePendantSVG,
+  },
+  {
+    slug: 'rose-eternity',
+    name: 'Rose Gold Eternity Band',
+    price: '$4,300',
+    category: 'Wedding Bands',
+    description: 'A romantic eternity band in 14K rose gold, featuring a continuous circle of brilliant diamonds. Perfect as a wedding band or anniversary gift.',
+    materials: ['14K Rose Gold', 'Diamonds 1ct total', 'Conflict-Free'],
+    dimensions: 'Ring Size 6 (resizable)',
+    svgContent: roseGoldRingSVG,
+  },
+  {
+    slug: 'tennis-necklace',
+    name: 'Diamond Tennis Necklace',
+    price: '$22,800',
+    category: 'Necklaces',
+    description: 'Sixty brilliant-cut diamonds of exceptional quality, precision-set in platinum. This classic tennis necklace features a secure clasp with safety latch.',
+    materials: ['Platinum', 'Diamonds 10ct total', 'VVS Clarity'],
+    dimensions: '16 inches',
+    svgContent: tennisNecklaceSVG,
+  },
+  {
+    slug: 'marquise-statement',
+    name: 'Marquise Statement Ring',
+    price: '$18,900',
+    category: 'Cocktail Rings',
+    description: 'A show-stopping marquise-cut diamond set in an intricate 18K white gold mounting. The elongated silhouette creates a dramatic, elegant look.',
+    materials: ['18K White Gold', 'Marquise Diamond 2.5ct', 'VS1 Clarity'],
+    dimensions: 'Ring Size 6 (resizable)',
+    svgContent: marquiseRingSVG,
+  },
 ];
 
-export function filterProducts(opts: { category?: Category; metal?: Metal; minPrice?: number; maxPrice?: number; search?: string; sort?: SortOption; featured?: boolean; }): Product[] {
-  let filtered = [...products];
-  if (opts.category) filtered = filtered.filter(p => p.category === opts.category);
-  if (opts.metal) filtered = filtered.filter(p => p.metal === opts.metal);
-  if (opts.minPrice) filtered = filtered.filter(p => p.price >= opts.minPrice!);
-  if (opts.maxPrice) filtered = filtered.filter(p => p.price <= opts.maxPrice!);
-  if (opts.featured) filtered = filtered.filter(p => p.featured);
-  if (opts.search) {
-    const q = opts.search.toLowerCase();
-    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
-  }
-  switch (opts.sort) {
-    case 'price-asc': filtered.sort((a, b) => a.price - b.price); break;
-    case 'price-desc': filtered.sort((a, b) => b.price - a.price); break;
-    case 'name': filtered.sort((a, b) => a.name.localeCompare(b.name)); break;
-    case 'newest': filtered.sort((a, b) => (b.new ? 1 : 0) - (a.new ? 1 : 0)); break;
-    case 'rating': filtered.sort((a, b) => b.rating - a.rating); break;
-  }
-  return filtered;
+export function getProductBySlug(slug: string): Product | undefined {
+  return products.find(p => p.slug === slug);
 }
 
-export function formatPrice(amount: number): string {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(amount);
+export function getProductsByCategory(category: string): Product[] {
+  return products.filter(p => p.category === category);
 }
+
+export const categories = [
+  'All',
+  'Engagement Rings',
+  'Wedding Bands',
+  'Necklaces',
+  'Earrings',
+  'Bracelets',
+  'Cocktail Rings',
+];

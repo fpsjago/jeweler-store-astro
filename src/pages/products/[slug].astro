@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { products, getProductBySlug } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map(product => ({
+    params: { slug: product.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const product = getProductBySlug(slug);
+
+if (!product) {
+  return Astro.redirect('/404');
+}
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={`${product.name} - MAISON`} description={product.description}>
+  <article class="product-detail">
+    <div class="container">
+      <a href={`${baseUrl}collections/`} class="back-link">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 4 L6 10 L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to Collections
+      </a>
+      
+      <div class="product-layout">
+        <div class="product-image-section">
+          <div class="product-image-main" set:html={product.svgContent} />
+        </div>
+        
+        <div class="product-info-section">
+          <p class="category">{product.category}</p>
+          <h1>{product.name}</h1>
+          <p class="price">{product.price}</p>
+          
+          <div class="description">
+            <p>{product.description}</p>
+          </div>
+          
+          <div class="details">
+            <h3>Details</h3>
+            <dl>
+              <dt>Materials</dt>
+              <dd>
+                <ul>
+                  {product.materials.map(material => (
+                    <li>{material}</li>
+                  ))}
+                </ul>
+              </dd>
+              
+              <dt>Dimensions</dt>
+              <dd>{product.dimensions}</dd>
+            </dl>
+          </div>
+          
+          <div class="actions">
+            <button class="btn-primary">Request Information</button>
+            <button class="btn-secondary">Schedule Viewing</button>
+          </div>
+          
+          <div class="care-info">
+            <h4>Care & Maintenance</h4>
+            <p>Each piece comes with detailed care instructions and a certificate of authenticity. We offer complimentary cleaning and inspection services for life.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+  
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--warm-gray);
+    margin-bottom: var(--spacing-lg);
+    font-size: 0.95rem;
+  }
+  
+  .back-link:hover {
+    color: var(--gold);
+  }
+  
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+  }
+  
+  .product-image-section {
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+  }
+  
+  .product-image-main {
+    background-color: white;
+    border-radius: 4px;
+    padding: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+  }
+  
+  .product-image-main :global(svg) {
+    width: 100%;
+    height: 100%;
+    max-width: 400px;
+    max-height: 400px;
+  }
+  
+  .product-info-section {
+    padding: var(--spacing-md) 0;
+  }
+  
+  .category {
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .product-info-section h1 {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .price {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .description {
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid rgba(10, 10, 10, 0.1);
+    border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .description p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--warm-gray);
+  }
+  
+  .details {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .details h3 {
+    margin-bottom: var(--spacing-md);
+    font-size: 1.25rem;
+  }
+  
+  .details dl {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+  
+  .details dt {
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .details dd {
+    color: var(--warm-gray);
+  }
+  
+  .details ul {
+    list-style: none;
+  }
+  
+  .details li {
+    padding-left: var(--spacing-sm);
+    position: relative;
+  }
+  
+  .details li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 4px;
+    height: 4px;
+    background-color: var(--gold);
+    border-radius: 50%;
+  }
+  
+  .actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .btn-primary {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--black);
+    color: var(--cream);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--gold);
+    color: var(--black);
+  }
+  
+  .btn-secondary {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: 2px solid var(--black);
+    background: none;
+    color: var(--black);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--black);
+    color: var(--cream);
+  }
+  
+  .care-info {
+    background-color: white;
+    padding: var(--spacing-md);
+    border-radius: 4px;
+  }
+  
+  .care-info h4 {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 0.05em;
+  }
+  
+  .care-info p {
+    color: var(--warm-gray);
+    font-size: 0.95rem;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: var(--spacing-md);
+    }
+    
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+    
+    .product-image-section {
+      position: relative;
+      top: 0;
+    }
+    
+    .product-image-main {
+      padding: var(--spacing-lg);
+    }
+    
+    .actions {
+      flex-direction: column;
+    }
+  }
+</style>
