@@ -20,15 +20,47 @@ const baseUrl = import.meta.env.BASE_URL;
       <a href={`${baseUrl}contact/`}>Contact</a>
     </nav>
     
-    <button class="menu-toggle" aria-label="Toggle menu">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <button class="menu-toggle" aria-label="Toggle menu" id="menuToggle">
+      <svg class="icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
         <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
         <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/>
       </svg>
+      <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
+        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2"/>
+      </svg>
     </button>
   </div>
 </header>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const toggle = document.getElementById('menuToggle');
+    const nav = document.querySelector('.nav');
+    const iconOpen = toggle?.querySelector('.icon-open') as HTMLElement;
+    const iconClose = toggle?.querySelector('.icon-close') as HTMLElement;
+
+    toggle?.addEventListener('click', () => {
+      const isOpen = nav?.classList.toggle('nav--open');
+      if (iconOpen && iconClose) {
+        iconOpen.style.display = isOpen ? 'none' : 'block';
+        iconClose.style.display = isOpen ? 'block' : 'none';
+      }
+    });
+
+    // Close menu when clicking a link
+    nav?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('nav--open');
+        if (iconOpen && iconClose) {
+          iconOpen.style.display = 'block';
+          iconClose.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
 
 <style>
   .header {
@@ -106,6 +138,25 @@ const baseUrl = import.meta.env.BASE_URL;
     
     .nav {
       display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background-color: var(--cream);
+      padding: var(--spacing-md) var(--spacing-lg);
+      gap: var(--spacing-md);
+      border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .nav.nav--open {
+      display: flex;
+    }
+    
+    .nav a {
+      font-size: 1.1rem;
+      padding: var(--spacing-xs) 0;
     }
     
     .menu-toggle {
