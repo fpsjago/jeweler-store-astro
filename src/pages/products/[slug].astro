@@ -1,7 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { products, getProductBySlug } from '../../data/products';
 
 import diamondRing1 from '../../assets/diamond-ring-1.jpg';
 import pearlEarrings1 from '../../assets/pearl-earrings-1.jpg';
@@ -19,41 +19,38 @@ import topazRing1 from '../../assets/topaz-ring-1.jpg';
 import diamondBracelet1 from '../../assets/diamond-bracelet-1.jpg';
 import jewelryWorkshop1 from '../../assets/jewelry-workshop-1.jpg';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const products = await getCollection('products');
   return products.map(product => ({
     params: { slug: product.slug },
+    props: { product },
   }));
 }
 
-const { slug } = Astro.params;
-const product = getProductBySlug(slug);
-
-if (!product) {
-  return Astro.redirect('/404');
-}
-
+const { product } = Astro.props;
+const { Content } = await product.render();
 const baseUrl = import.meta.env.BASE_URL;
 
 // Map product images
 const imageMap: Record<string, any> = {
-  '../assets/diamond-ring-1.jpg': diamondRing1,
-  '../assets/pearl-earrings-1.jpg': pearlEarrings1,
-  '../assets/gold-bracelet-1.jpg': goldBracelet1,
-  '../assets/emerald-ring-1.jpg': emeraldRing1,
-  '../assets/sapphire-ring-1.jpg': sapphireRing1,
-  '../assets/wedding-rings-1.jpg': weddingRings1,
-  '../assets/gold-necklace-1.jpg': goldNecklace1,
-  '../assets/diamond-ring-2.jpg': diamondRing2,
-  '../assets/gold-pendant-1.jpg': goldPendant1,
-  '../assets/luxury-watch-1.jpg': luxuryWatch1,
-  '../assets/gold-necklace-2.jpg': goldNecklace2,
-  '../assets/ruby-ring-1.jpg': rubyRing1,
-  '../assets/topaz-ring-1.jpg': topazRing1,
-  '../assets/diamond-bracelet-1.jpg': diamondBracelet1,
-  '../assets/jewelry-workshop-1.jpg': jewelryWorkshop1,
+  'diamond-ring-1.jpg': diamondRing1,
+  'pearl-earrings-1.jpg': pearlEarrings1,
+  'gold-bracelet-1.jpg': goldBracelet1,
+  'emerald-ring-1.jpg': emeraldRing1,
+  'sapphire-ring-1.jpg': sapphireRing1,
+  'wedding-rings-1.jpg': weddingRings1,
+  'gold-necklace-1.jpg': goldNecklace1,
+  'diamond-ring-2.jpg': diamondRing2,
+  'gold-pendant-1.jpg': goldPendant1,
+  'luxury-watch-1.jpg': luxuryWatch1,
+  'gold-necklace-2.jpg': goldNecklace2,
+  'ruby-ring-1.jpg': rubyRing1,
+  'topaz-ring-1.jpg': topazRing1,
+  'diamond-bracelet-1.jpg': diamondBracelet1,
+  'jewelry-workshop-1.jpg': jewelryWorkshop1,
 };
 
-const productImage = imageMap[product.imagePath];
+const productImage = imageMap[product.data.image];
 const optimizedImage = await getImage({ 
   src: productImage, 
   format: 'webp', 
@@ -62,7 +59,7 @@ const optimizedImage = await getImage({
 });
 ---
 
-<BaseLayout title={`${product.name} - MAISON`} description={product.description}>
+<BaseLayout title={`${product.data.name} - MAISON`} description={product.data.description}>
   <article class="product-detail">
     <div class="container">
       <a href={`${baseUrl}collections/`} class="back-link">
@@ -77,7 +74,7 @@ const optimizedImage = await getImage({
           <div class="product-image-main">
             <img 
               src={optimizedImage.src} 
-              alt={product.name} 
+              alt={product.data.name} 
               width={optimizedImage.attributes.width} 
               height={optimizedImage.attributes.height}
             />
@@ -85,12 +82,12 @@ const optimizedImage = await getImage({
         </div>
         
         <div class="product-info-section" transition:animate="slide">
-          <p class="category">{product.category}</p>
-          <h1>{product.name}</h1>
-          <p class="price">{product.price}</p>
+          <p class="category">{product.data.category}</p>
+          <h1>{product.data.name}</h1>
+          <p class="price">{product.data.price}</p>
           
           <div class="description">
-            <p>{product.description}</p>
+            <p>{product.data.description}</p>
           </div>
           
           <div class="details">
@@ -99,14 +96,14 @@ const optimizedImage = await getImage({
               <dt>Materials</dt>
               <dd>
                 <ul>
-                  {product.materials.map(material => (
+                  {product.data.materials.map((material: string) => (
                     <li>{material}</li>
                   ))}
                 </ul>
               </dd>
               
               <dt>Dimensions</dt>
-              <dd>{product.dimensions}</dd>
+              <dd>{product.data.dimensions}</dd>
             </dl>
           </div>
           
@@ -115,9 +112,8 @@ const optimizedImage = await getImage({
             <button class="btn-secondary">Schedule Viewing</button>
           </div>
           
-          <div class="care-info">
-            <h4>Care & Maintenance</h4>
-            <p>Each piece comes with detailed care instructions and a certificate of authenticity. We offer complimentary cleaning and inspection services for life.</p>
+          <div class="product-content">
+            <Content />
           </div>
         </div>
       </div>
@@ -261,7 +257,7 @@ const optimizedImage = await getImage({
   .actions {
     display: flex;
     gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
   }
   
   .btn-primary {
@@ -295,21 +291,73 @@ const optimizedImage = await getImage({
     color: var(--cream);
   }
   
-  .care-info {
+  .product-content {
     background-color: white;
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg);
     border-radius: 4px;
+    line-height: 1.8;
   }
   
-  .care-info h4 {
-    font-size: 1rem;
-    margin-bottom: var(--spacing-sm);
-    letter-spacing: 0.05em;
+  .product-content :global(h2) {
+    font-size: 1.75rem;
+    margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+    color: var(--black);
   }
   
-  .care-info p {
+  .product-content :global(h3) {
+    font-size: 1.35rem;
+    margin: var(--spacing-md) 0 var(--spacing-sm) 0;
+    color: var(--black);
+  }
+  
+  .product-content :global(h4) {
+    font-size: 1.15rem;
+    margin: var(--spacing-md) 0 var(--spacing-xs) 0;
+    color: var(--black);
+  }
+  
+  .product-content :global(p) {
+    margin-bottom: var(--spacing-md);
     color: var(--warm-gray);
-    font-size: 0.95rem;
+  }
+  
+  .product-content :global(ul),
+  .product-content :global(ol) {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-lg);
+  }
+  
+  .product-content :global(li) {
+    margin-bottom: var(--spacing-xs);
+    color: var(--warm-gray);
+  }
+  
+  .product-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .product-content :global(th),
+  .product-content :global(td) {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid rgba(10, 10, 10, 0.1);
+    text-align: left;
+  }
+  
+  .product-content :global(th) {
+    background-color: var(--cream);
+    font-weight: 600;
+    color: var(--black);
+  }
+  
+  .product-content :global(td) {
+    color: var(--warm-gray);
+  }
+  
+  .product-content :global(strong) {
+    color: var(--black);
+    font-weight: 600;
   }
   
   @media (max-width: 768px) {
@@ -333,6 +381,10 @@ const optimizedImage = await getImage({
     
     .actions {
       flex-direction: column;
+    }
+    
+    .product-content {
+      padding: var(--spacing-md);
     }
   }
 </style>

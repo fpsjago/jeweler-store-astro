@@ -1,17 +1,23 @@
 ---
+import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/ProductCard.astro';
-import { products } from '../data/products';
 
 import heroImg from '../assets/diamond-ring-hero.jpg';
 import diamondRing1 from '../assets/diamond-ring-1.jpg';
 import pearlEarrings1 from '../assets/pearl-earrings-1.jpg';
-import goldBracelet1 from '../assets/gold-bracelet-1.jpg';
 import emeraldRing1 from '../assets/emerald-ring-1.jpg';
+import sapphireRing1 from '../assets/sapphire-ring-1.jpg';
 
 const baseUrl = import.meta.env.BASE_URL;
-const featuredProducts = products.slice(0, 4);
+
+// Get all products and filter featured ones
+const allProducts = await getCollection('products');
+const featuredProducts = allProducts
+  .filter(p => p.data.featured)
+  .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+  .slice(0, 4);
 
 const optimizedHero = await getImage({ 
   src: heroImg, 
@@ -20,7 +26,7 @@ const optimizedHero = await getImage({
   height: 1080 
 });
 
-const productImages = [diamondRing1, pearlEarrings1, goldBracelet1, emeraldRing1];
+const productImages = [diamondRing1, pearlEarrings1, emeraldRing1, sapphireRing1];
 const optimizedProducts = await Promise.all(
   productImages.map(img => getImage({ 
     src: img, 
@@ -53,7 +59,10 @@ const optimizedProducts = await Promise.all(
       <div class="product-grid">
         {featuredProducts.map((product, index) => (
           <ProductCard 
-            {...product} 
+            slug={product.slug}
+            name={product.data.name}
+            price={product.data.price}
+            category={product.data.category}
             imageSrc={optimizedProducts[index].src}
             imageWidth={optimizedProducts[index].attributes.width}
             imageHeight={optimizedProducts[index].attributes.height}
