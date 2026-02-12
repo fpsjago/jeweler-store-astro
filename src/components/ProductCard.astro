@@ -4,15 +4,25 @@ interface Props {
   name: string;
   price: string;
   category: string;
-  svgContent: string;
+  imageSrc: string;
+  imageWidth: number;
+  imageHeight: number;
 }
 
-const { slug, name, price, category, svgContent } = Astro.props;
+const { slug, name, price, category, imageSrc, imageWidth, imageHeight } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
 ---
 
-<a href={`${baseUrl}products/${slug}/`} class="product-card">
-  <div class="product-image" set:html={svgContent} />
+<a href={`${baseUrl}products/${slug}/`} class="product-card" transition:name={`product-${slug}`}>
+  <div class="product-image">
+    <img 
+      src={imageSrc} 
+      alt={name} 
+      width={imageWidth} 
+      height={imageHeight}
+      loading="lazy"
+    />
+  </div>
   <div class="product-info">
     <p class="category">{category}</p>
     <h3>{name}</h3>
@@ -26,28 +36,32 @@ const baseUrl = import.meta.env.BASE_URL;
     background-color: white;
     border-radius: 2px;
     overflow: hidden;
-    transition: var(--transition);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(10, 10, 10, 0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(10, 10, 10, 0.12);
   }
   
   .product-image {
-    aspect-ratio: 1;
+    aspect-ratio: 4/3;
     background-color: var(--cream);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-lg);
+    overflow: hidden;
   }
   
-  .product-image :global(svg) {
+  .product-image img {
     width: 100%;
     height: 100%;
-    max-width: 200px;
-    max-height: 200px;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .product-card:hover .product-image img {
+    transform: scale(1.08);
   }
   
   .product-info {
@@ -66,6 +80,11 @@ const baseUrl = import.meta.env.BASE_URL;
   .product-info h3 {
     font-size: 1.25rem;
     margin-bottom: var(--spacing-xs);
+    transition: color 0.3s ease;
+  }
+  
+  .product-card:hover .product-info h3 {
+    color: var(--gold);
   }
   
   .price {
@@ -75,12 +94,12 @@ const baseUrl = import.meta.env.BASE_URL;
   }
   
   @media (max-width: 768px) {
-    .product-image {
-      padding: var(--spacing-md);
-    }
-    
     .product-info {
       padding: var(--spacing-sm);
+    }
+    
+    .product-info h3 {
+      font-size: 1.1rem;
     }
   }
 </style>

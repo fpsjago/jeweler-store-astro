@@ -1,6 +1,23 @@
 ---
+import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { products, getProductBySlug } from '../../data/products';
+
+import diamondRing1 from '../../assets/diamond-ring-1.jpg';
+import pearlEarrings1 from '../../assets/pearl-earrings-1.jpg';
+import goldBracelet1 from '../../assets/gold-bracelet-1.jpg';
+import emeraldRing1 from '../../assets/emerald-ring-1.jpg';
+import sapphireRing1 from '../../assets/sapphire-ring-1.jpg';
+import weddingRings1 from '../../assets/wedding-rings-1.jpg';
+import goldNecklace1 from '../../assets/gold-necklace-1.jpg';
+import diamondRing2 from '../../assets/diamond-ring-2.jpg';
+import goldPendant1 from '../../assets/gold-pendant-1.jpg';
+import luxuryWatch1 from '../../assets/luxury-watch-1.jpg';
+import goldNecklace2 from '../../assets/gold-necklace-2.jpg';
+import rubyRing1 from '../../assets/ruby-ring-1.jpg';
+import topazRing1 from '../../assets/topaz-ring-1.jpg';
+import diamondBracelet1 from '../../assets/diamond-bracelet-1.jpg';
+import jewelryWorkshop1 from '../../assets/jewelry-workshop-1.jpg';
 
 export function getStaticPaths() {
   return products.map(product => ({
@@ -16,6 +33,33 @@ if (!product) {
 }
 
 const baseUrl = import.meta.env.BASE_URL;
+
+// Map product images
+const imageMap: Record<string, any> = {
+  '../assets/diamond-ring-1.jpg': diamondRing1,
+  '../assets/pearl-earrings-1.jpg': pearlEarrings1,
+  '../assets/gold-bracelet-1.jpg': goldBracelet1,
+  '../assets/emerald-ring-1.jpg': emeraldRing1,
+  '../assets/sapphire-ring-1.jpg': sapphireRing1,
+  '../assets/wedding-rings-1.jpg': weddingRings1,
+  '../assets/gold-necklace-1.jpg': goldNecklace1,
+  '../assets/diamond-ring-2.jpg': diamondRing2,
+  '../assets/gold-pendant-1.jpg': goldPendant1,
+  '../assets/luxury-watch-1.jpg': luxuryWatch1,
+  '../assets/gold-necklace-2.jpg': goldNecklace2,
+  '../assets/ruby-ring-1.jpg': rubyRing1,
+  '../assets/topaz-ring-1.jpg': topazRing1,
+  '../assets/diamond-bracelet-1.jpg': diamondBracelet1,
+  '../assets/jewelry-workshop-1.jpg': jewelryWorkshop1,
+};
+
+const productImage = imageMap[product.imagePath];
+const optimizedImage = await getImage({ 
+  src: productImage, 
+  format: 'webp', 
+  width: 800, 
+  height: 600 
+});
 ---
 
 <BaseLayout title={`${product.name} - MAISON`} description={product.description}>
@@ -29,11 +73,18 @@ const baseUrl = import.meta.env.BASE_URL;
       </a>
       
       <div class="product-layout">
-        <div class="product-image-section">
-          <div class="product-image-main" set:html={product.svgContent} />
+        <div class="product-image-section" transition:animate="fade">
+          <div class="product-image-main">
+            <img 
+              src={optimizedImage.src} 
+              alt={product.name} 
+              width={optimizedImage.attributes.width} 
+              height={optimizedImage.attributes.height}
+            />
+          </div>
         </div>
         
-        <div class="product-info-section">
+        <div class="product-info-section" transition:animate="slide">
           <p class="category">{product.category}</p>
           <h1>{product.name}</h1>
           <p class="price">{product.price}</p>
@@ -88,6 +139,7 @@ const baseUrl = import.meta.env.BASE_URL;
     color: var(--warm-gray);
     margin-bottom: var(--spacing-lg);
     font-size: 0.95rem;
+    transition: color 0.3s ease;
   }
   
   .back-link:hover {
@@ -108,19 +160,22 @@ const baseUrl = import.meta.env.BASE_URL;
   
   .product-image-main {
     background-color: white;
-    border-radius: 4px;
-    padding: var(--spacing-xl);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1;
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   }
   
-  .product-image-main :global(svg) {
+  .product-image-main img {
     width: 100%;
-    height: 100%;
-    max-width: 400px;
-    max-height: 400px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .product-image-main:hover img {
+    transform: scale(1.05);
   }
   
   .product-info-section {

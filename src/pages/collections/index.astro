@@ -1,11 +1,43 @@
 ---
+import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { products, categories } from '../../data/products';
+
+import diamondRing1 from '../../assets/diamond-ring-1.jpg';
+import pearlEarrings1 from '../../assets/pearl-earrings-1.jpg';
+import goldBracelet1 from '../../assets/gold-bracelet-1.jpg';
+import emeraldRing1 from '../../assets/emerald-ring-1.jpg';
+import sapphireRing1 from '../../assets/sapphire-ring-1.jpg';
+import weddingRings1 from '../../assets/wedding-rings-1.jpg';
+import goldNecklace1 from '../../assets/gold-necklace-1.jpg';
+import diamondRing2 from '../../assets/diamond-ring-2.jpg';
+import goldPendant1 from '../../assets/gold-pendant-1.jpg';
+import luxuryWatch1 from '../../assets/luxury-watch-1.jpg';
+import goldNecklace2 from '../../assets/gold-necklace-2.jpg';
+import rubyRing1 from '../../assets/ruby-ring-1.jpg';
+import topazRing1 from '../../assets/topaz-ring-1.jpg';
+import diamondBracelet1 from '../../assets/diamond-bracelet-1.jpg';
+import jewelryWorkshop1 from '../../assets/jewelry-workshop-1.jpg';
+
+const productImages = [
+  diamondRing1, pearlEarrings1, goldBracelet1, emeraldRing1, sapphireRing1,
+  weddingRings1, goldNecklace1, diamondRing2, goldPendant1, luxuryWatch1,
+  goldNecklace2, rubyRing1, topazRing1, diamondBracelet1, jewelryWorkshop1
+];
+
+const optimizedProducts = await Promise.all(
+  productImages.map(img => getImage({ 
+    src: img, 
+    format: 'webp', 
+    width: 600, 
+    height: 400 
+  }))
+);
 ---
 
 <BaseLayout title="Collections - MAISON">
-  <section class="page-header">
+  <section class="page-header" transition:animate="slide">
     <div class="container">
       <h1>Our Collections</h1>
       <p>Discover exquisite pieces crafted for life's most precious moments</p>
@@ -22,8 +54,13 @@ import { products, categories } from '../../data/products';
       </div>
 
       <div class="product-grid">
-        {products.map(product => (
-          <ProductCard {...product} />
+        {products.map((product, index) => (
+          <ProductCard 
+            {...product} 
+            imageSrc={optimizedProducts[index].src}
+            imageWidth={optimizedProducts[index].attributes.width}
+            imageHeight={optimizedProducts[index].attributes.height}
+          />
         ))}
       </div>
     </div>

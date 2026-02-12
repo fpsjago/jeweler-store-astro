@@ -1,29 +1,45 @@
 ---
+import { getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { products } from '../data/products';
 
+import heroImg from '../assets/diamond-ring-hero.jpg';
+import diamondRing1 from '../assets/diamond-ring-1.jpg';
+import pearlEarrings1 from '../assets/pearl-earrings-1.jpg';
+import goldBracelet1 from '../assets/gold-bracelet-1.jpg';
+import emeraldRing1 from '../assets/emerald-ring-1.jpg';
+
 const baseUrl = import.meta.env.BASE_URL;
 const featuredProducts = products.slice(0, 4);
+
+const optimizedHero = await getImage({ 
+  src: heroImg, 
+  format: 'webp', 
+  width: 1920, 
+  height: 1080 
+});
+
+const productImages = [diamondRing1, pearlEarrings1, goldBracelet1, emeraldRing1];
+const optimizedProducts = await Promise.all(
+  productImages.map(img => getImage({ 
+    src: img, 
+    format: 'webp', 
+    width: 600, 
+    height: 400 
+  }))
+);
 ---
 
 <BaseLayout title="MAISON - Exquisite Handcrafted Jewelry">
   <section class="hero">
-    <div class="hero-content">
+    <div class="hero-content" transition:animate="slide">
       <h1>Timeless Elegance</h1>
       <p>Discover our collection of handcrafted jewelry, where artistry meets exceptional quality.</p>
       <a href={`${baseUrl}collections/`} class="btn-primary">Explore Collections</a>
     </div>
-    <div class="hero-image">
-      <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="200" cy="200" r="120" stroke="#C6A87D" stroke-width="2" opacity="0.3"/>
-        <circle cx="200" cy="200" r="90" stroke="#C6A87D" stroke-width="3" opacity="0.5"/>
-        <circle cx="200" cy="200" r="60" stroke="#C6A87D" stroke-width="4"/>
-        <path d="M200 140 L230 180 L200 240 L170 180 Z" fill="none" stroke="#0A0A0A" stroke-width="2"/>
-        <path d="M200 180 L215 195 L200 210 L185 195 Z" fill="#C6A87D" opacity="0.4"/>
-        <line x1="200" y1="140" x2="200" y2="240" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
-        <line x1="170" y1="180" x2="230" y2="180" stroke="#0A0A0A" stroke-width="1" opacity="0.3"/>
-      </svg>
+    <div class="hero-image" transition:animate="fade">
+      <img src={optimizedHero.src} alt="Exquisite diamond ring showcasing timeless elegance" width={optimizedHero.attributes.width} height={optimizedHero.attributes.height} />
     </div>
   </section>
 
@@ -35,8 +51,13 @@ const featuredProducts = products.slice(0, 4);
       </div>
       
       <div class="product-grid">
-        {featuredProducts.map(product => (
-          <ProductCard {...product} />
+        {featuredProducts.map((product, index) => (
+          <ProductCard 
+            {...product} 
+            imageSrc={optimizedProducts[index].src}
+            imageWidth={optimizedProducts[index].attributes.width}
+            imageHeight={optimizedProducts[index].attributes.height}
+          />
         ))}
       </div>
       
@@ -123,10 +144,22 @@ const featuredProducts = products.slice(0, 4);
     max-width: 500px;
   }
   
-  .hero-image svg {
+  .hero-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  }
+  
+  .hero-image img {
     width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hero-image:hover img {
+    transform: scale(1.05);
   }
   
   .btn-primary {
