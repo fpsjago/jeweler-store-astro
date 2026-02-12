@@ -1,0 +1,43 @@
+---
+import { categories, products } from '../data/products';
+---
+
+<section class="categories">
+  <div class="container">
+    <div class="section-header">
+      <p class="eyebrow">Browse By</p>
+      <h2>Categories</h2>
+    </div>
+    <div class="cat-grid">
+      {categories.map(cat => {
+        const count = products.filter(p => p.category === cat.value).length;
+        return (
+          <a href={`/collections?category=${cat.value}`} class="cat-card">
+            <span class="cat-icon">{cat.icon}</span>
+            <span class="cat-label">{cat.label}</span>
+            <span class="cat-count">{count} pieces</span>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .categories { padding: var(--space-3xl) 0; background: var(--color-bg-alt); }
+  .section-header { text-align: center; margin-bottom: var(--space-2xl); }
+  .eyebrow { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-sm); }
+  .section-header h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); }
+  .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
+  @media (min-width: 768px) { .cat-grid { grid-template-columns: repeat(5, 1fr); } }
+  .cat-card {
+    display: flex; flex-direction: column; align-items: center; gap: var(--space-md);
+    padding: var(--space-xl) var(--space-md); background: var(--color-surface);
+    border: 1px solid var(--color-border-light); border-radius: var(--border-radius-lg);
+    text-align: center; transition: border-color var(--transition), transform var(--transition);
+  }
+  .cat-card:hover { border-color: var(--color-accent); transform: translateY(-2px); }
+  .cat-icon { font-size: 2rem; }
+  .cat-label { font-family: var(--font-heading); font-size: 1rem; }
+  .cat-count { font-size: 0.75rem; color: var(--color-text-muted); }
+</style>

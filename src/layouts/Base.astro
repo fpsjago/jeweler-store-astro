@@ -1,0 +1,29 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { store } from '../data/store';
+interface Props { title?: string; description?: string; currentPage?: string; }
+const { title = store.name, description = store.description, currentPage = '' } = Astro.props;
+const fullTitle = title === store.name ? title : `${title} | ${store.name}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{fullTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      const t = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    </script>
+  </head>
+  <body>
+    <Header currentPage={currentPage} />
+    <main><slot /></main>
+    <Footer />
+  </body>
+</html>

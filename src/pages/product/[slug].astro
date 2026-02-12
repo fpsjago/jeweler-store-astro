@@ -1,0 +1,75 @@
+---
+import Base from '../../layouts/Base.astro';
+import { products, formatPrice } from '../../data/products';
+import type { Product } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map(p => ({ params: { slug: p.slug }, props: { product: p } }));
+}
+
+interface Props { product: Product; }
+const { product } = Astro.props;
+const stars = '★'.repeat(Math.floor(product.rating));
+---
+
+<Base title={product.name}>
+  <section class="pdp container">
+    <div class="pdp-grid">
+      <div class="pdp-image">
+        <img src={product.images[0]} alt={product.name} width="600" height="600" />
+      </div>
+      <div class="pdp-info">
+        <p class="breadcrumb"><a href="/">Home</a> / <a href="/collections">Collections</a> / {product.name}</p>
+        <h1>{product.name}</h1>
+        <div class="rating"><span class="stars-display">{stars}</span> <span>{product.rating} ({product.reviewCount} reviews)</span></div>
+        <p class="price-line">
+          <span class="price">{formatPrice(product.price)}</span>
+          {product.comparePrice && <span class="compare">{formatPrice(product.comparePrice)}</span>}
+        </p>
+        <p class="desc">{product.description}</p>
+        <div class="meta">
+          <p><strong>Category:</strong> {product.category}</p>
+          <p><strong>Metal:</strong> {product.metal.replace('-', ' ')}</p>
+          {product.gemstone && <p><strong>Gemstone:</strong> {product.gemstone}</p>}
+          <p><strong>Availability:</strong> {product.inStock ? 'In Stock' : 'Made to Order'}</p>
+        </div>
+        <div class="actions">
+          <button class="btn-cart" data-product-id={product.id}>Add to Cart</button>
+          <button class="btn-wish" aria-label="Wishlist">♡</button>
+        </div>
+        <div class="shipping-info">✓ Free shipping over $500 · ✓ 30-day returns · ✓ Lifetime warranty</div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pdp { padding: var(--space-2xl) 0 var(--space-4xl); }
+  .pdp-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-2xl); }
+  @media (min-width: 768px) { .pdp-grid { grid-template-columns: 1fr 1fr; } }
+  .pdp-image { aspect-ratio: 1; border-radius: var(--border-radius-lg); overflow: hidden; background: var(--color-bg-alt); }
+  .pdp-image img { width: 100%; height: 100%; object-fit: cover; }
+  .pdp-info { display: flex; flex-direction: column; gap: var(--space-md); }
+  .breadcrumb { font-size: 0.8rem; color: var(--color-text-muted); }
+  .breadcrumb a { color: var(--color-accent); }
+  .pdp-info h1 { font-size: clamp(1.8rem, 3vw, 2.5rem); }
+  .rating { display: flex; align-items: center; gap: var(--space-sm); font-size: 0.9rem; color: var(--color-text-muted); }
+  .stars-display { color: var(--color-accent); }
+  .price { font-size: 1.5rem; font-weight: 600; }
+  .compare { font-size: 1rem; color: var(--color-text-muted); text-decoration: line-through; margin-left: var(--space-sm); }
+  .desc { color: var(--color-text-muted); line-height: 1.8; }
+  .meta { display: flex; flex-direction: column; gap: var(--space-sm); font-size: 0.9rem; color: var(--color-text-muted); }
+  .meta strong { color: var(--color-text); }
+  .actions { display: flex; gap: var(--space-md); flex-wrap: wrap; margin-top: var(--space-md); }
+  .btn-cart {
+    flex: 1; min-width: 200px; padding: 16px 32px;
+    background: var(--color-accent); color: white;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; border-radius: var(--border-radius);
+    text-align: center; transition: background var(--transition);
+  }
+  .btn-cart:hover { background: var(--color-accent-hover); }
+  .btn-wish { padding: 16px 24px; border: 1px solid var(--color-border); border-radius: var(--border-radius); font-size: 1.2rem; transition: border-color var(--transition); }
+  .btn-wish:hover { border-color: var(--color-accent); }
+  .shipping-info { padding: var(--space-md); background: var(--color-accent-light); border-radius: var(--border-radius); font-size: 0.85rem; color: var(--color-text-muted); }
+</style>
