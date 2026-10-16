@@ -1,0 +1,4 @@
+#!/bin/bash
+# Git pre-push hook — runs QA checks before allowing push
+echo "🚀 Pre-push hook: Running QA checks..."
+bash scripts/qa-check.sh

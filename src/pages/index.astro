@@ -1,0 +1,558 @@
+---
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { resolveProductImage } from '../lib/product-images';
+
+import heroImg from '../assets/hero-ring.jpg';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
+// Get all products and filter featured ones
+const allProducts = await getCollection('products');
+const featuredProducts = allProducts
+  .filter((p) => p.data.featured)
+  .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+  .slice(0, 4);
+
+// The hero photograph is the Largest Contentful Paint element. It is built by
+// hand (not with <Picture>) so the <link rel="preload"> below requests exactly
+// the same AVIF candidates the <picture> will pick.
+const heroWidths = [480, 720, 960, 1280];
+const heroSizes =
+  '(max-width: 768px) calc(100vw - 64px), (max-width: 1440px) calc(50vw - 126px), 594px';
+const [heroAvif, heroWebp] = await Promise.all(
+  (['avif', 'webp'] as const).map((format) =>
+    getImage({
+      src: heroImg,
+      format,
+      widths: heroWidths,
+      width: 1280,
+      height: 1280,
+      fit: 'cover',
+    })
+  )
+);
+---
+
+<BaseLayout title="MAISON - Exquisite Handcrafted Jewelry">
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    type="image/avif"
+    imagesrcset={heroAvif.srcSet.attribute}
+    imagesizes={heroSizes}
+    fetchpriority="high"
+  />
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="line"><span>Timeless</span></span>
+        <span class="line"><span>Elegance</span></span>
+      </h1>
+      <span class="hero-rule" aria-hidden="true"></span>
+      <p class="hero-lede">Discover our collection of handcrafted jewelry, where artistry meets exceptional quality.</p>
+      <a href={`${base}collections/`} class="btn-primary hero-cta">Explore Collections</a>
+    </div>
+
+    <figure class="hero-media">
+      <div class="hero-frame">
+        <picture>
+          <source type="image/avif" srcset={heroAvif.srcSet.attribute} sizes={heroSizes} />
+          <source type="image/webp" srcset={heroWebp.srcSet.attribute} sizes={heroSizes} />
+          <img
+            src={heroWebp.src}
+            alt="Diamond solitaire ring with a pavé split shank, lit against a deep navy ground"
+            width="1280"
+            height="1280"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
+      </div>
+      <figcaption>Solitaire, pavé split shank</figcaption>
+    </figure>
+  </section>
+
+  <section class="featured">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <h2>Featured Collection</h2>
+        <p>Handpicked pieces that embody our commitment to excellence</p>
+      </div>
+
+      <div class="product-grid">
+        {featuredProducts.map((product) => (
+          <ProductCard
+            id={product.id}
+            name={product.data.name}
+            price={product.data.price}
+            category={product.data.category}
+            image={resolveProductImage(product.data.image)}
+            sizes="(max-width: 768px) calc(100vw - 64px), (max-width: 1024px) calc(50vw - 100px), 300px"
+          />
+        ))}
+      </div>
+
+      <div class="cta-center" data-reveal>
+        <a href={`${base}collections/`} class="btn-secondary">View All Jewelry</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="values">
+    <div class="container">
+      <div class="values-grid">
+        <div class="value-item" data-reveal>
+          <div class="value-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+              <path d="M30 10 L40 20 L30 30 L20 20 Z" stroke="currentColor" stroke-width="2" fill="none"/>
+              <circle cx="30" cy="30" r="20" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+            </svg>
+          </div>
+          <h3>Exceptional Quality</h3>
+          <p>Every piece is crafted with meticulous attention to detail using only the finest materials.</p>
+        </div>
+
+        <div class="value-item" data-reveal>
+          <div class="value-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+              <path d="M20 25 L30 15 L40 25 L30 35 Z" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M30 35 L20 45 L30 55 L40 45 Z" stroke="currentColor" stroke-width="2" fill="none"/>
+              <line x1="30" y1="15" x2="30" y2="55" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+            </svg>
+          </div>
+          <h3>Timeless Design</h3>
+          <p>Classic elegance that transcends trends, designed to be treasured for generations.</p>
+        </div>
+
+        <div class="value-item" data-reveal>
+          <div class="value-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+              <circle cx="30" cy="30" r="15" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M15 30 L22 30 M38 30 L45 30 M30 15 L30 22 M30 38 L30 45" stroke="currentColor" stroke-width="2"/>
+              <circle cx="30" cy="30" r="3" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Ethical Sourcing</h3>
+          <p>We are committed to responsible sourcing and conflict-free materials in all our creations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="container">
+      <div class="story-content" data-reveal>
+        <h2>A Legacy of Excellence</h2>
+        <p>For generations, MAISON has been synonymous with exceptional craftsmanship and timeless beauty. Each piece in our collection tells a story of artistry, passion, and dedication to the finest traditions of jewelry making.</p>
+        <p>From our atelier to your collection, we ensure every detail meets the highest standards of luxury and elegance.</p>
+        <a href={`${base}about/`} class="btn-text">Discover Our Story</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: center;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
+    min-height: calc(100svh - 92px);
+  }
+
+  .hero-title {
+    font-size: clamp(3.25rem, 6.4vw, 6rem);
+    font-weight: 450;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin-bottom: var(--spacing-md);
+    color: var(--black);
+  }
+
+  /* Each line rises out of its own mask. The padding/margin pair keeps the
+     descender of the g inside the mask. */
+  .line {
+    display: block;
+    overflow: clip;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+
+  .line > span {
+    display: inline-block;
+  }
+
+  .line:nth-child(2) > span {
+    font-style: normal;
+    padding-left: 0.6em;
+  }
+
+  .hero-rule {
+    display: block;
+    width: 5.5rem;
+    height: 1px;
+    background-color: var(--gold);
+    margin-bottom: var(--spacing-md);
+    transform-origin: left center;
+  }
+
+  .hero-lede {
+    font-size: 1.3rem;
+    color: var(--muted);
+    margin-bottom: var(--spacing-lg);
+    max-width: 30ch;
+  }
+
+  .hero-media {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* Pale-gold passe-partout hairline set behind the photograph. */
+  .hero-media::before {
+    content: '';
+    position: absolute;
+    inset: 1.5rem -1.5rem 2.75rem 1.5rem;
+    border: 1px solid var(--gold);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .hero-frame {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 2px;
+    background-color: var(--black);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .hero-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-media figcaption {
+    margin-top: var(--spacing-sm);
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* Arrival: a cream curtain lifts off the photograph like a case lid, the
+     headline rises line by line and settles, the gold rule draws in. The curtain
+     is a pseudo-element, so the photo itself paints on the first frame and the
+     LCP is not delayed. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: var(--cream);
+      transform-origin: top center;
+      animation: curtain-lift 1.15s var(--ease-in-out) 0.1s both;
+    }
+
+    .hero-title {
+      animation: title-settle 1.8s var(--ease-out) both;
+    }
+
+    .line > span {
+      animation: line-rise 1.1s var(--ease-out) both;
+      animation-delay: 0.15s;
+    }
+
+    .line:nth-child(2) > span {
+      animation-delay: 0.27s;
+    }
+
+    .hero-rule {
+      animation: rule-draw 1s var(--ease-in-out) 0.6s both;
+    }
+
+    .hero-lede {
+      animation: soft-rise 0.9s var(--ease-out) 0.6s both;
+    }
+
+    .hero-cta {
+      animation: soft-rise 0.9s var(--ease-out) 0.72s both;
+    }
+
+    .hero-media figcaption {
+      animation: soft-rise 0.9s var(--ease-out) 0.95s both;
+    }
+
+    /* Scroll: three depths. The photo drifts down and settles inside its frame
+       (slower than the page), the hairline drifts up (faster), the copy lifts a
+       little. Unsupported browsers keep the still composition. */
+    @supports (animation-timeline: scroll()) {
+      .hero-frame img {
+        animation: photo-drift linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+
+      .hero-media::before {
+        animation: frame-drift linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+
+      .hero-content {
+        animation: copy-drift linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+    }
+  }
+
+  @keyframes curtain-lift {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(0); }
+  }
+
+  @keyframes line-rise {
+    from { translate: 0 108%; }
+    to { translate: 0 0; }
+  }
+
+  @keyframes title-settle {
+    from { letter-spacing: 0.01em; }
+    to { letter-spacing: -0.025em; }
+  }
+
+  @keyframes rule-draw {
+    from { scale: 0 1; }
+    to { scale: 1 1; }
+  }
+
+  @keyframes soft-rise {
+    from { opacity: 0; translate: 0 0.75rem; }
+    to { opacity: 1; translate: 0 0; }
+  }
+
+  @keyframes photo-drift {
+    from { scale: 1.14; translate: 0 0; }
+    to { scale: 1.06; translate: 0 3%; }
+  }
+
+  @keyframes frame-drift {
+    from { translate: 0 0; }
+    to { translate: 0 -3.5rem; }
+  }
+
+  @keyframes copy-drift {
+    from { translate: 0 0; }
+    to { translate: 0 -2.5rem; }
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn-primary {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--black);
+    color: var(--cream);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--gold);
+    color: var(--black);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: 2px solid var(--black);
+    color: var(--black);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--black);
+    color: var(--cream);
+  }
+
+  .btn-text {
+    color: var(--gold-ink);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    position: relative;
+    padding-bottom: 4px;
+  }
+
+  .btn-text::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    transform-origin: right center;
+    transition: scale 0.5s var(--ease-out);
+  }
+
+  .btn-text:hover::after {
+    scale: 0.35 1;
+  }
+
+  /* ---------- Sections ---------- */
+  .featured {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .section-header h2 {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-header p {
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* Stagger the scroll reveal across a row. */
+  .product-grid > :global(:nth-child(4n + 2)) { animation-range: entry 6% entry 76%; }
+  .product-grid > :global(:nth-child(4n + 3)) { animation-range: entry 12% entry 82%; }
+  .product-grid > :global(:nth-child(4n + 4)) { animation-range: entry 18% entry 88%; }
+
+  .cta-center {
+    text-align: center;
+  }
+
+  .values {
+    background-color: var(--surface);
+    padding: var(--spacing-xl) 0;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  .value-item:nth-child(2) { animation-range: entry 8% entry 78%; }
+  .value-item:nth-child(3) { animation-range: entry 16% entry 86%; }
+
+  .value-item {
+    text-align: center;
+  }
+
+  .value-icon {
+    margin-bottom: var(--spacing-md);
+    color: var(--gold);
+  }
+
+  .value-icon svg {
+    margin: 0 auto;
+  }
+
+  .value-item h3 {
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.5rem;
+  }
+
+  .value-item p {
+    color: var(--muted);
+  }
+
+  .story {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .story-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .story-content h2 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .story-content p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: var(--spacing-md);
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+      padding: var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+      min-height: auto;
+    }
+
+    .hero-title {
+      font-size: clamp(2.75rem, 13vw, 3.5rem);
+    }
+
+    .hero-media {
+      order: -1;
+    }
+
+    .hero-media::before {
+      inset: 1rem -0.75rem 2.25rem 0.75rem;
+    }
+
+    .hero-frame {
+      aspect-ratio: 5 / 4;
+    }
+
+    .product-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+
+    .values-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+
+    .container {
+      padding: 0 var(--spacing-md);
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

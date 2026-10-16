@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<BaseLayout title="Page not found - MAISON" description="This page could not be found. Return to the MAISON collections.">
+  <section class="not-found">
+    <div class="mark" aria-hidden="true">
+      <svg width="56" height="56" viewBox="0 0 40 40" fill="none">
+        <path d="M20 2L28 10L20 18L12 10L20 2Z" stroke="currentColor" stroke-width="1"/>
+        <path d="M20 22L28 30L20 38L12 30L20 22Z" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3"/>
+        <line x1="20" y1="18" x2="20" y2="22" stroke="currentColor" stroke-width="1"/>
+      </svg>
+    </div>
+    <p class="code">Error 404</p>
+    <h1>This piece is not in the case</h1>
+    <p class="lede">The page you are looking for has moved or never existed. Our full collection is a step away.</p>
+    <div class="actions">
+      <a class="btn-primary" href={`${base}collections/`}>Browse the Collections</a>
+      <a class="btn-text" href={base}>Return home</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .mark {
+    color: var(--gold);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .code {
+    font-size: 0.85rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  h1 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .lede {
+    font-size: 1.2rem;
+    color: var(--muted);
+    max-width: 36ch;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--black);
+    color: var(--cream);
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--gold);
+    color: var(--black);
+  }
+
+  .btn-text {
+    color: var(--gold-ink);
+    letter-spacing: 0.05em;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+  }
+
+  @media (max-width: 768px) {
+    .not-found {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+  }
+</style>

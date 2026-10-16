@@ -1,0 +1,59 @@
+# MAISON
+
+> A static Astro storefront template for luxury jewelers, ateliers and bespoke
+> studios. Catalogue-first: fifteen pieces presented with long-form editorial
+> detail — materials, dimensions, craftsmanship, care and customization — rather
+> than a checkout flow.
+
+This is a **free, open-source (MIT) website template** by FSEVO (Full Stack Evolved). The
+brand name MAISON, the products, the prices and the contact details in the
+shipped copy are demonstration content, not a real business. Anything published
+from this template will have replaced them.
+
+## What the site contains
+
+- **Home** (`/`) — hero, four featured pieces, brand values, story
+- **Collections** (`/collections/`) — all fifteen pieces, filterable by category
+- **Product pages** (`/products/<slug>/`) — one per piece: photograph, price,
+  materials, dimensions, plus a long editorial body covering craftsmanship,
+  specifications, care instructions, customization options and what is included
+- **About** (`/about/`) — heritage and atelier narrative
+- **Contact** (`/contact/`) — enquiry details and form markup
+
+## Categories
+
+Engagement Rings · Wedding Bands · Necklaces · Earrings · Bracelets ·
+Cocktail Rings · Watches · Services
+
+## Commerce status
+
+There is no cart, no checkout and no payment provider. Prices are display
+strings. Pieces are presented for enquiry and in-person sale. Any deployment
+claiming otherwise has added its own integration.
+
+## Technical
+
+Astro 7 static output. No UI or CSS framework. Content lives in Markdown with
+Zod-validated frontmatter under `src/content/products/`. Images are optimized to
+AVIF and WebP at build time. Cross-page navigation uses the View Transitions API.
+
+## Crawling and training
+
+Crawling is **allowed** by default; see `/robots.txt` for the authoritative
+rules, which the operator of any given deployment may have changed.
+
+Two caveats for anyone reusing what is found here:
+
+- The **photographs** are from Pexels, used under the Pexels License, with the
+  photographer and source of each listed in IMAGE-CREDITS.md. They depict no real
+  MAISON product.
+- The **product copy** is written demonstration content. Specifications, carat
+  weights, certifications and prices describe no real product and must not be
+  presented as factual claims about any jewelry that exists.
+
+## More
+
+- Template author: FSEVO — https://www.fullstackevolved.com
+- More templates: https://www.fullstackevolved.com/templates/
+- Documentation shipped with the template: README.md, CUSTOMIZATION.md,
+  DEPLOYMENT.md, IMAGE-CREDITS.md

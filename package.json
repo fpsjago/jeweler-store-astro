@@ -1,0 +1,30 @@
+{
+  "name": "jeweler-store-astro",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "MAISON: a free, accessible Astro catalogue template for jewelers and ateliers.",
+  "license": "MIT",
+  "homepage": "https://fpsjago.github.io/jeweler-store-astro/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpsjago/jeweler-store-astro.git"
+  },
+  "author": "FULLSTACK EVOLVED LLC (https://www.fullstackevolved.com)",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^7.4.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=22.22.0"
+  }
+}
