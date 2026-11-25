@@ -1,9 +1,11 @@
 import { defineConfig, fontProviders } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://fpsjago.github.io',
   base: '/jeweler-store-astro/',
   output: 'static',
+  integrations: [sitemap({ filter: (page) => !/\/404\/?$/.test(page) })],
   build: {
     inlineStylesheets: 'auto',
   },
